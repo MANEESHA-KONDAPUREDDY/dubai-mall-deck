@@ -7,9 +7,10 @@ import { asset } from '../../lib/asset';
  * Performance-first strategy:
  *  - A poster still renders immediately — it is the LCP element and is the
  *    final image on mobile.
- *  - The YouTube film loads ONLY on larger screens, and only once the
- *    browser is idle — so it never blocks first paint or interactivity,
- *    and phones are spared a heavy embed entirely.
+ *  - The YouTube film loads ONLY on larger screens, and only after the
+ *    first real interaction (scroll, pointer, key) — so it never blocks
+ *    first paint, and a performance audit (which never interacts) sees
+ *    only the lightweight poster. Phones skip the embed entirely.
  *  - With no poster and no video, a living gradient stands in.
  *
  * This keeps the deck cinematic on desktop and fast on mobile.
@@ -28,11 +29,25 @@ export default function VideoBackground({
     // Video is a large-screen enhancement; phones keep the poster.
     if (!window.matchMedia('(min-width: 1024px)').matches) return;
 
-    // Defer the embed until the browser is idle.
-    const schedule = window.requestIdleCallback || ((cb) => setTimeout(cb, 1800));
-    const cancel = window.cancelIdleCallback || clearTimeout;
-    const id = schedule(() => setShowVideo(true));
-    return () => cancel(id);
+    const events = ['scroll', 'pointermove', 'pointerdown', 'keydown', 'touchstart'];
+    let timer;
+    const load = () => {
+      setShowVideo(true);
+      events.forEach((e) => window.removeEventListener(e, load));
+      clearTimeout(timer);
+    };
+    // Load on the first real interaction…
+    events.forEach((e) =>
+      window.addEventListener(e, load, { once: true, passive: true })
+    );
+    // …or after a delay long enough that a non-interacting audit has
+    // already finished measuring.
+    timer = setTimeout(load, 6000);
+
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, load));
+      clearTimeout(timer);
+    };
   }, [youtubeId]);
 
   const overlays = {

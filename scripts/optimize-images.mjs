@@ -1,10 +1,12 @@
 /**
  * optimize-images.mjs — compresses the deck's imagery for the web.
  *
- * The raw downloads from Wikimedia Commons are large (~4–5 MB total).
- * This re-encodes each JPEG in place: capped at 1280px wide, mozjpeg
- * quality 76, metadata stripped — typically a 55–65% size reduction with
- * no visible loss, which keeps the Lighthouse performance score high.
+ * For every source JPEG it:
+ *   1. re-encodes the JPEG in place (capped at 1280px, mozjpeg q76) —
+ *      the .jpg is kept as a fallback / for social-share meta tags;
+ *   2. writes a matching .webp (q72) — the app loads these via the
+ *      asset() helper, which is ~30% smaller and lifts the Lighthouse
+ *      performance score.
  *
  * Usage:  node scripts/optimize-images.mjs
  */
@@ -23,28 +25,31 @@ const DIR = join(
 );
 
 const files = (await readdir(DIR)).filter((f) => /\.jpe?g$/i.test(f));
-let before = 0;
-let after = 0;
+let jpgTotal = 0;
+let webpTotal = 0;
 
 for (const file of files) {
   const path = join(DIR, file);
   const original = (await stat(path)).size;
   const input = await readFile(path);
 
-  const output = await sharp(input)
+  const jpg = await sharp(input)
     .resize({ width: 1280, withoutEnlargement: true })
     .jpeg({ quality: 76, mozjpeg: true })
     .toBuffer();
+  if (jpg.length < original) await writeFile(path, jpg);
 
-  // Only overwrite if we actually saved space.
-  if (output.length < original) {
-    await writeFile(path, output);
-  }
-  before += original;
-  after += Math.min(output.length, original);
+  const webp = await sharp(input)
+    .resize({ width: 1280, withoutEnlargement: true })
+    .webp({ quality: 72 })
+    .toBuffer();
+  await writeFile(path.replace(/\.jpe?g$/i, '.webp'), webp);
+
+  jpgTotal += Math.min(jpg.length, original);
+  webpTotal += webp.length;
   const kb = (n) => `${Math.round(n / 1024)}KB`;
-  console.log(`  ${file.padEnd(28)} ${kb(original)} -> ${kb(Math.min(output.length, original))}`);
+  console.log(`  ${file.padEnd(28)} jpg ${kb(Math.min(jpg.length, original))}  webp ${kb(webp.length)}`);
 }
 
 const mb = (n) => `${(n / 1024 / 1024).toFixed(2)}MB`;
-console.log(`\nTotal: ${mb(before)} -> ${mb(after)}  (${Math.round((1 - after / before) * 100)}% smaller)`);
+console.log(`\nWebP set: ${mb(webpTotal)} (served to the app) · JPEG set: ${mb(jpgTotal)} (fallback)`);
