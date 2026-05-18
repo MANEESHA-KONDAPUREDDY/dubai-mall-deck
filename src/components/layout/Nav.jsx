@@ -4,6 +4,7 @@ import SideRail from './SideRail';
 import { meta } from '../../data/content';
 import { scrollToId, scrollToTop } from '../../lib/scroll';
 import { EASE } from '../../lib/motion';
+import { asset } from '../../lib/asset';
 
 /**
  * Nav — the deck's non-linear navigation system. Three coordinated layers:
@@ -24,7 +25,7 @@ function PreviewImage({ section }) {
   if (ok && section.image) {
     return (
       <img
-        src={section.image}
+        src={asset(section.image)}
         alt={section.label}
         onError={() => setOk(false)}
         className="h-full w-full object-cover"

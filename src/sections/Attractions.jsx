@@ -4,6 +4,7 @@ import StatCounter from '../components/ui/StatCounter';
 import Tilt from '../components/ui/Tilt';
 import { attractions } from '../data/content';
 import { revealMedia, viewportOnce } from '../lib/motion';
+import { asset } from '../lib/asset';
 
 /**
  * Attractions — the differentiator section, so it's the loudest.
@@ -23,7 +24,7 @@ function FeatureCard({ feature, span }) {
         className="group relative flex h-full min-h-[20rem] flex-col justify-end overflow-hidden rounded-2xl border border-line p-7 md:min-h-[24rem]"
       >
         <img
-          src={feature.image}
+          src={asset(feature.image)}
           alt={feature.name}
           loading="lazy"
           decoding="async"

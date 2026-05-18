@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { revealMedia, viewportOnce } from '../../lib/motion';
+import { asset } from '../../lib/asset';
 
 /**
  * MediaFrame — an image tile with a cinematic scale-in reveal and a subtle
@@ -42,7 +43,7 @@ export default function MediaFrame({
     >
       {src ? (
         <motion.img
-          src={src}
+          src={asset(src)}
           alt={alt || label || ''}
           loading="lazy"
           decoding="async"
