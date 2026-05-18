@@ -10,7 +10,9 @@ single, self-contained, cinematic web application. A salesperson can
 screen-share it on a live call, or send it as a link a prospect explores
 alone.
 
-**Live deck:** _(deployment URL added on submission)_
+**Live deck:** https://dubai-mall-deck-maneeshak2110-7915s-projects.vercel.app
+
+**Repository:** https://github.com/MANEESHA-KONDAPUREDDY/dubai-mall-deck
 
 ---
 
