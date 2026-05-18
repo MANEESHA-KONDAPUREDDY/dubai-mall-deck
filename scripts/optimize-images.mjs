@@ -41,7 +41,7 @@ for (const file of files) {
 
   const webp = await sharp(input)
     .resize({ width: 1280, withoutEnlargement: true })
-    .webp({ quality: 72 })
+    .webp({ quality: 62 })
     .toBuffer();
   await writeFile(path.replace(/\.jpe?g$/i, '.webp'), webp);
 
