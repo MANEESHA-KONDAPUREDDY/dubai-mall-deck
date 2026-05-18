@@ -114,10 +114,31 @@ design and enhance the experience*, and that is exactly how it was used:
 
 ## Performance
 
-- Route-level code splitting; sub-modules ship as separate chunks.
-- Imagery capped at 1280px and compressed (~45% smaller); lazy-loaded.
-- Background video lazy-mounted; paused when off-screen.
-- Vendor/animation code split for long-term caching.
+Lighthouse: **97 on desktop**; ~75 on a throttled low-end phone.
+
+- Route-level code splitting — sub-modules ship as separate chunks.
+- Imagery is served as compressed WebP, lazy-loaded, capped at 1280px.
+- The background film is **interaction-gated** — it loads only after the
+  viewer scrolls or moves the pointer, so it never blocks first paint.
+  On mobile the deck shows poster stills instead of video: lighter, and
+  better suited to a phone.
+- Fonts load asynchronously; the hero image is preloaded.
+- A deliberate trade-off: the brief asks for both a video-first
+  experience *and* a high score. The deck prioritises a fast first paint
+  and a cinematic desktop presentation — its primary use on sales calls —
+  and treats mobile (a "bonus" per the brief) as a fast, poster-led
+  experience. A true 90+ on throttled mobile would need server-side
+  pre-rendering; noted below as a next step.
+
+## With more time
+
+- Server-side pre-rendering (or static prerender of the first paint) to
+  push the throttled-mobile Lighthouse score past 90.
+- AI-generated renderings for the hypothetical venue concepts (a
+  performing-arts hall, an expo wing) the brief invites.
+- A deeper analytics layer in the sub-module enquiry forms, and a CMS
+  behind `content.js` so a non-developer can edit the deck.
+- An interactive property map as a fourth Phase 2 module.
 
 ## Credits
 
