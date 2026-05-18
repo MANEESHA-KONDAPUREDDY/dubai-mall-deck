@@ -2,10 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 
 // https://vite.dev/config/
-// The site is served from a project subpath on GitHub Pages, so the
-// production build uses a base path; dev stays at root.
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/dubai-mall-deck/' : '/',
+export default defineConfig({
   plugins: [react()],
   build: {
     target: 'es2020',
@@ -27,4 +24,4 @@ export default defineConfig(({ command }) => ({
       },
     },
   },
-}));
+});
