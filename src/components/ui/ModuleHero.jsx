@@ -11,7 +11,9 @@ export default function ModuleHero({ eyebrow, title, lead }) {
     <section className="deck-section vignette flex min-h-[78svh] flex-col justify-end">
       <VideoBackground
         youtubeId={media.moduleVideoId || media.eventsVideoId}
+        poster={media.eventsPoster}
         overlay="heavy"
+        eager
       />
       <div className="deck-pad relative z-10 pb-16 pt-32">
         <SectionHeading

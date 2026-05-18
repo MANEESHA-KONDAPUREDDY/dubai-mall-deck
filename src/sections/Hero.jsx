@@ -23,9 +23,14 @@ export default function Hero() {
       id="hero"
       className="deck-section vignette flex min-h-[100svh] flex-col justify-end"
     >
-      {/* Pulls the hero film from content.media — shows a living
-          placeholder until a YouTube id is wired in. */}
-      <VideoBackground youtubeId={media.heroVideoId} overlay="heavy" />
+      {/* Poster loads instantly (and stays on mobile); the film fades in
+          on desktop once the browser is idle. */}
+      <VideoBackground
+        youtubeId={media.heroVideoId}
+        poster={media.heroPoster}
+        overlay="heavy"
+        eager
+      />
 
       {/* Localised scrim — guarantees the headline and stats stay legible
           no matter what frame the background film is on. */}

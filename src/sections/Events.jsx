@@ -13,7 +13,11 @@ import { events, media } from '../data/content';
 export default function Events() {
   return (
     <section id="events" className="deck-section relative py-24 md:py-32">
-      <VideoBackground youtubeId={media.eventsVideoId} overlay="standard" />
+      <VideoBackground
+        youtubeId={media.eventsVideoId}
+        poster={media.eventsPoster}
+        overlay="standard"
+      />
 
       <div className="deck-pad relative z-10">
         <SectionHeading

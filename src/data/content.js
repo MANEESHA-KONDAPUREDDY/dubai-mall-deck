@@ -39,6 +39,10 @@ export const media = {
   eventsVideoId: 'dFtckQwGpYo',
   // Sub-module heroes — reuses the events film when left empty.
   moduleVideoId: '',
+  // Poster stills — shown instantly, and used in place of the video on
+  // mobile so the experience stays fast on a phone.
+  heroPoster: '/assets/images/hero-poster.jpg',
+  eventsPoster: '/assets/images/events-fountain.jpg',
 };
 
 /**
